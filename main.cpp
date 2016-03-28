@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
      dir_watcher_source->addPath(w.sourcePath);
      dir_watcher_target->addPath(w.targetPath);
      dir_watcher_backup->addPath(w.backupPath);
-
+//pass the file path into the fileHandClass when constructing
      fileHandleClass csvRenameObj1(w,&w);
 //user changed the path settings or running status, emit signal to let CSV handle object know it.
     QObject::connect(&w,SIGNAL(TextChanged_Source(QString)),&csvRenameObj1,SLOT(updateHandlePath_source(QString)));
