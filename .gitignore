@@ -59,4 +59,5 @@
 # Debug files
 *.dSYM/
 #QT Files
-*.pro*
+*.pro
+*.pro.*
