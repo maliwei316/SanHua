@@ -15,6 +15,7 @@ fileHandleClass::fileHandleClass(const MainWindow &w,QObject *parent):QObject(pa
     this->targetPath=w.targetPath;
     this->backupPath=w.backupPath;
     this->backupEnabled=w.backupEnabled;
+    this->timeFormat=w.timeFormat;
 
     QFile file1("log_display.txt");
     //limit the size of the log file:log_dispaly.txt
@@ -134,12 +135,27 @@ QString fileHandleClass::generateNewName(const QString &oldname)
 
              //Time Format #1:   12/11/2015 4:47:18 PM
              //Time Format #2:   10/24/2015 18:03
-             //QDateTime dt1=QDateTime::fromString(strList_cycleData[index_testTime],"MM/dd/yyyy hh:mm");
-             QDateTime dt1=QDateTime::fromString(strList_cycleData[index_testTime],"MM/dd/yyyy hh:mm:ss A");
+             QDateTime dt1;
+             QString testDateTime;
+             switch (this->timeFormat) {
+             case 0:
+                 dt1=QDateTime::fromString(strList_cycleData[index_testTime],"MM/dd/yyyy hh:mm:ss A");
+                 testDateTime=dt1.toString("yyyyMMddhhmmss");
+                 break;
+             case 1:
+                 dt1=QDateTime::fromString(strList_cycleData[index_testTime],"MM/dd/yyyy hh:mm");
+                 testDateTime=dt1.toString("yyyyMMddhhmm")+"00";
+                 break;
+             default:
+                 dt1=QDateTime::fromString(strList_cycleData[index_testTime],"MM/dd/yyyy hh:mm:ss A");
+                 testDateTime=dt1.toString("yyyyMMddhhmmss");
+                 break;
+             }
+
              //Time in CSV before convertion:10/24/2015 18:03  10/24/2015 6:03:45 PM
-             //Time in CSV after convertion:20151024180300;
-             //QString testDateTime=dt1.toString("yyyyMMddhhmm")+"00";
-             QString testDateTime=dt1.toString("yyyyMMddhhmmss");
+             //Time in CSV after convertion:20151024180300     20151024180345;
+
+
              if(testDateTime.isEmpty())
              {
                 testDateTime="BAD_Time_Format";
@@ -296,6 +312,12 @@ void fileHandleClass::updateRunStatus(const bool running)
 {
     this->runStatus=running;
     emit LogEventTriggered_FileHandle("fileHandleClass::updateRunStatus(const bool running)",int(214),int(2));
+}
+
+void fileHandleClass::updateTimeFormat(const int index)
+{
+    this->timeFormat=index;
+    emit LogEventTriggered_FileHandle("From now on fileHandleClass will use timeformat(index):"+QString::number(index),int(305),int(2));
 }
 void fileHandleClass::writeLogFile(QString LogInfo,int eventNO,int eventLevel)
 {

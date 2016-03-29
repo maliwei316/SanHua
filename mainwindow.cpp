@@ -173,7 +173,23 @@ void MainWindow::on_checkBox_EnableBackup_toggled(bool checked)
     if(!runningStatus)
     emit this->backupFeature_changed(checked);
 }
+void MainWindow::on_comboBox_currentIndexChanged(int index)
+{
+ if(!runningStatus)
+ {
+     this->timeFormat=index;
+     this->writeSettings();
+     emit this->timeFormatSettingChanged(index);
+     emit this->LogEventTriggered_MainWindow("time format changed to index:"+QString::number(index),int(183),int (2));
+ }
+  else
+ {   this->ui->comboBox->setCurrentIndex(this->timeFormat);
+     QMessageBox::warning(this, tr("Warning"),
+                       tr("修改参数前需停止运行此程序"),
+                       QMessageBox::Ok);
+                       }
 
+}
 
 void MainWindow::writeSettings()
 {
@@ -183,6 +199,7 @@ void MainWindow::writeSettings()
     settings.setValue("targetPath", this->targetPath);
     settings.setValue("backupPath", this->backupPath);
     settings.setValue("backupEnabled", this->backupEnabled);
+    settings.setValue("timeFormat",this->timeFormat);
     emit this->LogEventTriggered_MainWindow("void MainWindow::writeSettings() executed,Source:"+sourcePath+
                                             ",Target:"+targetPath+",backup:"+(backupEnabled?"true":"false")+",path:"+backupPath,int(104),int(2));
 
@@ -201,37 +218,63 @@ void MainWindow::readSettings()
         this->targetPath=settings.value("targetPath").toString();
         this->backupPath=settings.value("backupPath").toString();
         this->backupEnabled=settings.value("backupEnabled").toBool();
-
+        this->timeFormat=settings.value("timeFormat").toInt();
+        if(-1==this->timeFormat)
+        {this->timeFormat=0;}
         ui->lineEdit_SourcePath->setText(this->sourcePath);
         ui->lineEdit_TargetPath->setText(this->targetPath);
         ui->lineEdit_BackupPath->setText(this->backupPath);
         ui->checkBox_EnableBackup->setChecked(this->backupEnabled);
+        ui->comboBox->setCurrentIndex(this->timeFormat);
         emit this->LogEventTriggered_MainWindow(tr("found dukane.ini ,will use configuration inside it"),int(103),int(2));
 
     }
     else
     {
-       QDir dir1;
+       //try to make path for source,target and backup
+        QDir dir1;
        if(dir1.mkpath("C:/Dukane/SourceData/"))
        {qDebug()<<"C:/Dukane/SourceData created";}
        else
        {qDebug()<<"C:/Dukane/SourceData  creation failed";}
-       dir1.mkpath("C:/Dukane/TargetData/");
-       dir1.mkpath("C:/Dukane/BackupedData/");
-        this->sourcePath="C:/Dukane/SourceData";
-        this->targetPath="C:/Dukane/TargetData";
-        this->backupPath="C:/Dukane/BackupedData";
+       if(dir1.mkpath("C:/Dukane/TargetData/"))
+       {qDebug()<<"C:/Dukane/TargetData created";}
+       else
+       {qDebug()<<"C:/Dukane/TargetData creation failed";}
+
+       if(dir1.mkpath("C:/Dukane/BackupedData/"))
+       {qDebug()<<"C:/Dukane/BackupedData created";}
+       else
+       {qDebug()<<"C:/Dukane/BackupedData creation failed";}
+       //initialize the path with default strings
+       if (dir1.exists("C:/Dukane/SourceData"))
+       {
+         this->sourcePath="C:/Dukane/SourceData";
+         this->ui->lineEdit_SourcePath->setText(sourcePath);
+       }
+        if(dir1.exists("C:/Dukane/TargetData"))
+        {
+            this->targetPath="C:/Dukane/TargetData";
+            this->ui->lineEdit_TargetPath->setText(targetPath);
+        }
+        if(dir1.exists("C:/Dukane/BackupedData"))
+        {
+           this->backupPath="C:/Dukane/BackupedData";
+           this->ui->lineEdit_BackupPath->setText(backupPath);
+        }
+
         this->backupEnabled=true;
-        this->ui->lineEdit_SourcePath->setText(sourcePath);
-        this->ui->lineEdit_TargetPath->setText(targetPath);
-        this->ui->lineEdit_BackupPath->setText(backupPath);
         this->ui->checkBox_EnableBackup->setChecked(backupEnabled);
+        this->timeFormat=int(0);
+        this->ui->comboBox->setCurrentIndex(timeFormat);
+
         QSettings settings("dukane.ini",
                            QSettings::IniFormat);
         settings.setValue("sourcePath", this->sourcePath);
         settings.setValue("targetPath", this->targetPath);
         settings.setValue("backupPath", this->backupPath);
         settings.setValue("backupEnabled", this->backupEnabled);
+        settings.setValue("timeFormat",this->timeFormat);
        emit this->LogEventTriggered_MainWindow(tr("did not found dukane.ini , will use default settings"),int(102));
     }
 
@@ -253,6 +296,7 @@ void MainWindow::on_pushButton_Pause_clicked()
     ui->statusBar->showMessage(tr("已停止"));
     emit this->LogEventTriggered_MainWindow(tr("stopped"),int(100));
 }
+
 void MainWindow::writeLogToTextEdit(QString LogInfo,int eventNO,int eventLevel)
 {
     if(eventLevel!=2)
@@ -261,3 +305,5 @@ void MainWindow::writeLogToTextEdit(QString LogInfo,int eventNO,int eventLevel)
         ui->textEdit->append(currentTime+" eventNO:"+QString::number(eventNO)+"  "+LogInfo+'\n');
     }
 }
+
+

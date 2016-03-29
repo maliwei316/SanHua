@@ -23,6 +23,7 @@ signals:
  void TextChanged_Backup(const QString &newString);
  void backupFeature_changed(const bool checked);
  void runningStatusChanged(const bool running);
+ void timeFormatSettingChanged(const int index);
  void LogEventTriggered_MainWindow(QString LogInfo,int eventNO=0,int eventLevel=0);
 private slots:
     void on_actionQuit_triggered();
@@ -48,6 +49,8 @@ private slots:
     void on_pushButton_Pause_clicked();
 
     void writeLogToTextEdit(QString LogInfo,int eventNO=0,int eventLevel=0);
+    void on_comboBox_currentIndexChanged(int index);
+
 private:
     Ui::MainWindow *ui;
 public:
@@ -56,6 +59,7 @@ public:
     QString backupPath;
     bool backupEnabled;
     bool runningStatus;
+    int timeFormat;
 };
 
 #endif // MAINWINDOW_H

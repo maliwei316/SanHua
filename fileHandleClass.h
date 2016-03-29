@@ -28,6 +28,7 @@ public slots:
      void updateHandlePath_backup(const QString newPath);
      void updateBackupFeature(const bool checked);
      void updateRunStatus(const bool running);
+     void updateTimeFormat(const int index);
      void writeLogFile(QString LogInfo,int eventNO=0,int eventLevel=0);
 public:
 
@@ -36,6 +37,7 @@ public:
     QString backupPath;
     bool backupEnabled;
     bool runStatus;
+    int timeFormat;
     //QString path_log_display;
 
 };

@@ -28,6 +28,7 @@ int main(int argc, char *argv[])
     QObject::connect(&w,SIGNAL(TextChanged_Source(QString)),&csvRenameObj1,SLOT(updateHandlePath_source(QString)));
     QObject::connect(&w,SIGNAL(TextChanged_Target(QString)),&csvRenameObj1,SLOT(updateHandlePath_target(QString)));
     QObject::connect(&w,SIGNAL(TextChanged_Backup(QString)),&csvRenameObj1,SLOT(updateHandlePath_backup(QString)));
+    QObject::connect(&w,SIGNAL(timeFormatSettingChanged(int)),&csvRenameObj1,SLOT(updateTimeFormat(int)));
 
     QObject::connect(&w,SIGNAL(backupFeature_changed(const bool)),&csvRenameObj1,SLOT(updateBackupFeature(const bool)));
     QObject::connect(&w,SIGNAL(runningStatusChanged(const bool)),&csvRenameObj1,SLOT(updateRunStatus(const bool)));
@@ -46,7 +47,8 @@ int main(int argc, char *argv[])
 
      QObject::connect(&csvRenameObj1,SIGNAL(LogEventTriggered_FileHandle(QString,int,int)),&w,SLOT(writeLogToTextEdit(QString,int,int)));
      QObject::connect(&csvRenameObj1,SIGNAL(LogEventTriggered_FileHandle(QString,int,int)),&csvRenameObj1,SLOT(writeLogFile(QString,int,int)));
-    w.show();
+
+     w.show();
     return a.exec();
 
 }
