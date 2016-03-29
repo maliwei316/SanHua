@@ -170,7 +170,7 @@ void MainWindow::on_lineEdit_BackupPath_textChanged(const QString &arg1)
 
 void MainWindow::on_checkBox_EnableBackup_toggled(bool checked)
 {
-    if(！runningStatus)
+    if(!runningStatus)
     emit this->backupFeature_changed(checked);
 }
 
@@ -183,7 +183,8 @@ void MainWindow::writeSettings()
     settings.setValue("targetPath", this->targetPath);
     settings.setValue("backupPath", this->backupPath);
     settings.setValue("backupEnabled", this->backupEnabled);
-    emit this->LogEventTriggered_MainWindow("void MainWindow::writeSettings() executed,Source:"+sourcePath+",Target:"+targetPath+",backup:"+(backupEnabled?"true":"false")+",path:"+backupPath,int(104),int(2));
+    emit this->LogEventTriggered_MainWindow("void MainWindow::writeSettings() executed,Source:"+sourcePath+
+                                            ",Target:"+targetPath+",backup:"+(backupEnabled?"true":"false")+",path:"+backupPath,int(104),int(2));
 
 }
 
