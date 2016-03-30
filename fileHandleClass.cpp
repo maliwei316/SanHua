@@ -237,27 +237,39 @@ void fileHandleClass::copyCSV()
               qDebug()<<"newName_backup:"+newName_backup;
               if(QFile::copy(fileInfo.absoluteFilePath(),newName_backup))
               {
-                emit LogEventTriggered_FileHandle("suceed to copy CSV to backup path,"+newName_backup,int(205));
+                  QString text= "<font color='Green'>succeed</font> to copy CSV to backup path,";
+                  emit LogEventTriggered_FileHandle(text+newName_backup,int(205));
               }
               else
               {
-                emit LogEventTriggered_FileHandle("failed to copy CSV to backup path,"+newName_backup,int(305));
+                  QString text= "<font color='red'>failed </font> to copy CSV to backup path,";
+                  emit LogEventTriggered_FileHandle(text+newName_backup,int(305));
               }
           }
           //Before rename the CSV , the first step is to copy the CSV into the target path without changing its name
           //After finished the copy , then delete the original CSV in the source path
           if(QFile::copy(fileInfo.absoluteFilePath(),newName_target))
           {
-              emit LogEventTriggered_FileHandle("succeed to copy CSV to target path,"+newName_target,int(206));
+              QString text= "<font color='Green'>succeed </font> to copy CSV to target path,";
+              emit LogEventTriggered_FileHandle(text+newName_target,int(206));
               if(dir_source.remove(fileInfo.fileName()))
-              {emit LogEventTriggered_FileHandle("deleted CSV in source path,"+fileInfo.absoluteFilePath(),int(207));}
+              {
+                  text= "<font color='Green'>succeed </font> to delete CSV in source path,";
+                  emit LogEventTriggered_FileHandle(text+fileInfo.absoluteFilePath(),int(207));
+              }
               else
-              {emit LogEventTriggered_FileHandle("failed to delete CSV in source path,"+fileInfo.absoluteFilePath(),int(207));}
+              {
+                  text= "<font color='red'>failed </font> to delete CSV in source path,";
+                  emit LogEventTriggered_FileHandle(text+fileInfo.absoluteFilePath(),int(207));
+              }
 
           }
           //if failed to copy the CSV to target path , write a record into log file
           else
-          {emit LogEventTriggered_FileHandle("Failed to copy CSV to target path,"+newName_target,int(306));}
+          {
+              QString text= "<font color='red'>failed </font> to copy CSV to target path,";
+              emit LogEventTriggered_FileHandle(text+newName_target,int(306));
+          }
 
        }
     }
@@ -288,11 +300,13 @@ void fileHandleClass::renameCSV()
              qDebug()<<"newName_target:"+fileInfo.absolutePath()+"/" +newName_target;
              if(dir_target.rename(fileInfo.absoluteFilePath(),fileInfo.absolutePath()+"/" +newName_target))
              {
-                emit LogEventTriggered_FileHandle("succeed to rename tmp in target path to csv,old name:"+fileInfo.fileName()+",new name:"+newName_target,int(208));
+                QString text= "<font color='Green'>succeed </font> to rename tmp in target path to csv,old name:";
+                 emit LogEventTriggered_FileHandle(text+fileInfo.fileName()+",new name:"+newName_target,int(208));
              }
              else
              {
-                emit LogEventTriggered_FileHandle("Failed to rename tmp in target path to csv,old name:"+fileInfo.fileName()+",new name:"+newName_target,int(308));
+                QString text= "<font color='red'>Failed </font> to rename tmp in target path to csv,old name:";
+                emit LogEventTriggered_FileHandle(text+fileInfo.fileName()+",new name:"+newName_target,int(308));
              }
 
          }

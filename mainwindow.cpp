@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QDir>
+#include <QLabel>
 
 
 
@@ -19,7 +20,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     this->readSettings();
     this->runningStatus=false;
-    ui->statusBar->showMessage(tr("已停止"));
+    this->statusbarLabel=new QLabel(this->ui->statusBar);
+    this->statusbarLabel->setFrameShape(QFrame::Box); // 设置标签形状
+    this->statusbarLabel->setFrameShadow(QFrame::Sunken); // 设置标签阴影
+    this->statusbarLabel->setStyleSheet ("background-color: rgb(255,0,0);color: rgb(255,255,255);");
+    this->statusbarLabel->setText("<font bgcolor='red'>已停止</font>");
+    ui->statusBar->addWidget(statusbarLabel);
+    //ui->statusBar->showMessage("<font bgcolor='red'>已停止</font>");
 
 }
 
@@ -241,7 +248,10 @@ void MainWindow::on_pushButton_Run_clicked()
 {
     runningStatus=true;
     emit this->runningStatusChanged(runningStatus);
-    ui->statusBar->showMessage(tr("正在运行"));
+    QString statusbarText="<font bgcolor='green'>正在运行</font>";
+    this->statusbarLabel->setStyleSheet ("background-color: rgb(0,255,0);color: rgb(255,255,255);");
+    this->statusbarLabel->setText(statusbarText);
+    //ui->statusBar->showMessage(statusbarText);
     emit this->LogEventTriggered_MainWindow(tr("start to run"),int(101));
 }
 
@@ -249,7 +259,10 @@ void MainWindow::on_pushButton_Pause_clicked()
 {
     runningStatus=false;
     emit this->runningStatusChanged(runningStatus);
-    ui->statusBar->showMessage(tr("已停止"));
+    QString statusbarText="<font bgcolor='red'>已停止</font>";
+    this->statusbarLabel->setStyleSheet ("background-color: rgb(255,0,0);color: rgb(255,255,255);");
+    this->statusbarLabel->setText(statusbarText);
+    //ui->statusBar->showMessage(statusbarText);
     emit this->LogEventTriggered_MainWindow(tr("stopped"),int(100));
 }
 void MainWindow::writeLogToTextEdit(QString LogInfo,int eventNO,int eventLevel)

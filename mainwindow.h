@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+class QLabel;
 namespace Ui {
 class MainWindow;
 }
@@ -50,6 +50,7 @@ private slots:
     void writeLogToTextEdit(QString LogInfo,int eventNO=0,int eventLevel=0);
 private:
     Ui::MainWindow *ui;
+    QLabel *statusbarLabel;
 public:
     QString sourcePath;
     QString targetPath;
