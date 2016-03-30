@@ -170,7 +170,7 @@ void MainWindow::on_lineEdit_BackupPath_textChanged(const QString &arg1)
 
 void MainWindow::on_checkBox_EnableBackup_toggled(bool checked)
 {
-    if(！runningStatus)
+    if(!runningStatus)
     emit this->backupFeature_changed(checked);
 }
 

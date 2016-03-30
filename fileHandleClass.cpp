@@ -131,19 +131,56 @@ QString fileHandleClass::generateNewName(const QString &oldname)
         //cycle data size >=6, means the file is valid
          if(strList_cycleData.size()>=6)
          {
+             QDateTime dt1;
+             QString testDateTime;
+// "if ,else if"s  below is used to generate the time_filed of the new file name according to the time format
+//in the CSV
+             if(
+                  dt1=QDateTime::fromString(strList_cycleData[index_testTime],"M/dd/yyyy hh:mm:ss A"),
+                  testDateTime=dt1.toString("yyyyMMddhhmmss"),
+                  !testDateTime.isEmpty()
+                ){}
+
+             else if (
+                     dt1=QDateTime::fromString(strList_cycleData[index_testTime],"M/dd/yyyy hh:mm:ss"),
+                     testDateTime=dt1.toString("yyyyMMddhhmmss"),
+                     !testDateTime.isEmpty()
+                    ){}
+             else if (
+                     dt1=QDateTime::fromString(strList_cycleData[index_testTime],"M/dd/yyyy hh:mm"),
+                     testDateTime=dt1.toString("yyyyMMddhhmm"),
+                     !testDateTime.isEmpty()
+                    ){testDateTime+="00";}
+             else if (
+                     dt1=QDateTime::fromString(strList_cycleData[index_testTime],"M/dd/yyyy h:mm"),
+                     testDateTime=dt1.toString("yyyyMMddhhmm"),
+                     !testDateTime.isEmpty()
+                    ){testDateTime+="00";}
+             else if (
+                     dt1=QDateTime::fromString(strList_cycleData[index_testTime],"M/dd/yyyy h:mm:ss"),
+                     testDateTime=dt1.toString("yyyyMMddhhmmss"),
+                     !testDateTime.isEmpty()
+                    ){}
+             else if (
+                     dt1=QDateTime::fromString(strList_cycleData[index_testTime],"M/dd/yyyy h:mm:ss A"),
+                     testDateTime=dt1.toString("yyyyMMddhhmmss"),
+                     !testDateTime.isEmpty()
+                    ){}
+             else
+             {testDateTime="BAD_Time_Format";}
 
              //Time Format #1:   12/11/2015 4:47:18 PM
              //Time Format #2:   10/24/2015 18:03
              //QDateTime dt1=QDateTime::fromString(strList_cycleData[index_testTime],"MM/dd/yyyy hh:mm");
-             QDateTime dt1=QDateTime::fromString(strList_cycleData[index_testTime],"MM/dd/yyyy hh:mm:ss A");
+             //dt1=QDateTime::fromString(strList_cycleData[index_testTime],"MM/dd/yyyy hh:mm:ss A");
              //Time in CSV before convertion:10/24/2015 18:03  10/24/2015 6:03:45 PM
              //Time in CSV after convertion:20151024180300;
              //QString testDateTime=dt1.toString("yyyyMMddhhmm")+"00";
-             QString testDateTime=dt1.toString("yyyyMMddhhmmss");
-             if(testDateTime.isEmpty())
-             {
-                testDateTime="BAD_Time_Format";
-             }
+             //testDateTime=dt1.toString("yyyyMMddhhmmss");
+             //if(testDateTime.isEmpty())
+             //{
+              //  testDateTime="BAD_Time_Format";
+             //}
              QString cycleData_weldResult=(strList_cycleData[index_weldResult]=="Good" or strList_cycleData[index_weldResult]=="合格件")? "OK":"NG";
              QString cycleData_barcode;
              if(index_barcode!=0)
