@@ -22,7 +22,7 @@
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
-        <string>Run</string>
+        <string>运行</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
