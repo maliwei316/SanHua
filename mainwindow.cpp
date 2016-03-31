@@ -212,32 +212,108 @@ void MainWindow::readSettings()
         ui->lineEdit_TargetPath->setText(this->targetPath);
         ui->lineEdit_BackupPath->setText(this->backupPath);
         ui->checkBox_EnableBackup->setChecked(this->backupEnabled);
+
         emit this->LogEventTriggered_MainWindow(tr("found dukane.ini ,will use configuration inside it"),int(103),int(2));
+        QDir dir1;
+        if(!dir1.exists(this->sourcePath))
+        {
+
+            if(!dir1.mkpath(this->sourcePath))
+          {
+              QMessageBox::warning(this, tr("Warning"),
+                                        tr("SourcePath目录不存在且无法创建，请重新设置"),
+                                        QMessageBox::Ok);
+          }
+        }
+        if(!dir1.exists(this->targetPath))
+        {
+          if(!dir1.mkpath(this->targetPath))
+          {
+              QMessageBox::warning(this, tr("Warning"),
+                                        tr("TargetPath目录不存在且无法创建，请重新设置"),
+                                        QMessageBox::Ok);
+          }
+        }
+        if(!dir1.exists(this->backupPath))
+        {
+          if(!dir1.mkpath(this->backupPath))
+          {
+              QMessageBox::warning(this, tr("Warning"),
+                                        tr("BackupPath目录不存在且无法创建，请重新设置"),
+                                        QMessageBox::Ok);
+          }
+        }
 
     }
     else
     {
        QDir dir1;
-       if(dir1.mkpath("C:/Dukane/SourceData/"))
-       {qDebug()<<"C:/Dukane/SourceData created";}
-       else
-       {qDebug()<<"C:/Dukane/SourceData  creation failed";}
-       dir1.mkpath("C:/Dukane/TargetData/");
-       dir1.mkpath("C:/Dukane/BackupedData/");
-        this->sourcePath="C:/Dukane/SourceData";
-        this->targetPath="C:/Dukane/TargetData";
-        this->backupPath="C:/Dukane/BackupedData";
+       QString source="C:/Dukane/SourceData/";
+       QString target="C:/Dukane/TargetData/";
+       QString backup="C:/Dukane/BackupData/";
+       if(!dir1.exists(source))
+       {
+           if(dir1.mkpath(source))
+           {
+               emit this->LogEventTriggered_MainWindow(source+"creation succeed",
+                                                       int(224));
+               qDebug()<<source+"created";
+               this->sourcePath=source;
+               this->ui->lineEdit_SourcePath->setText(sourcePath);
+           }
+           else
+           {
+               emit this->LogEventTriggered_MainWindow(source+"creation failed",
+                                                       int(230));
+               qDebug()<<source+"creation failed";
+           }
+
+       }
+       if(!dir1.exists(target))
+       {
+           if(dir1.mkpath(target))
+           {
+               emit this->LogEventTriggered_MainWindow(target+"creation succeed",
+                                                       int(244));
+               qDebug()<<target+"created";
+               this->targetPath=target;
+               this->ui->lineEdit_TargetPath->setText(targetPath);
+           }
+           else
+           {
+               emit this->LogEventTriggered_MainWindow(target+"creation failed",
+                                                       int(250));
+               qDebug()<<target+"creation failed";
+           }
+
+       }
+       if(!dir1.exists(backup))
+       {
+           if(dir1.mkpath(backup))
+           {
+               emit this->LogEventTriggered_MainWindow(backup+"creation succeed",
+                                                       int(224));
+               qDebug()<<backup+"created";
+               this->backupPath=backup;
+               this->ui->lineEdit_BackupPath->setText(backupPath);
+           }
+           else
+           {
+               emit this->LogEventTriggered_MainWindow(backup+"creation failed",
+                                                       int(230));
+               qDebug()<<backup+"creation failed";
+           }
+
+       }
+
         this->backupEnabled=true;
-        this->ui->lineEdit_SourcePath->setText(sourcePath);
-        this->ui->lineEdit_TargetPath->setText(targetPath);
-        this->ui->lineEdit_BackupPath->setText(backupPath);
         this->ui->checkBox_EnableBackup->setChecked(backupEnabled);
         QSettings settings("dukane.ini",
                            QSettings::IniFormat);
-        settings.setValue("sourcePath", this->sourcePath);
-        settings.setValue("targetPath", this->targetPath);
-        settings.setValue("backupPath", this->backupPath);
-        settings.setValue("backupEnabled", this->backupEnabled);
+        settings.setValue("sourcePath", source);
+        settings.setValue("targetPath", target);
+        settings.setValue("backupPath", backup);
+        settings.setValue("backupEnabled", true);
        emit this->LogEventTriggered_MainWindow(tr("did not found dukane.ini , will use default settings"),int(102));
     }
 

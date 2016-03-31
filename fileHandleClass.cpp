@@ -136,33 +136,33 @@ QString fileHandleClass::generateNewName(const QString &oldname)
 // "if ,else if"s  below is used to generate the time_filed of the new file name according to the time format
 //in the CSV
              if(
-                  dt1=QDateTime::fromString(strList_cycleData[index_testTime],"M/dd/yyyy hh:mm:ss A"),
+                  dt1=QDateTime::fromString(strList_cycleData[index_testTime],"M/d/yyyy hh:mm:ss A"),
                   testDateTime=dt1.toString("yyyyMMddhhmmss"),
                   !testDateTime.isEmpty()
                 ){}
 
              else if (
-                     dt1=QDateTime::fromString(strList_cycleData[index_testTime],"M/dd/yyyy hh:mm:ss"),
+                     dt1=QDateTime::fromString(strList_cycleData[index_testTime],"M/d/yyyy hh:mm:ss"),
                      testDateTime=dt1.toString("yyyyMMddhhmmss"),
                      !testDateTime.isEmpty()
                     ){}
              else if (
-                     dt1=QDateTime::fromString(strList_cycleData[index_testTime],"M/dd/yyyy hh:mm"),
+                     dt1=QDateTime::fromString(strList_cycleData[index_testTime],"M/d/yyyy hh:mm"),
                      testDateTime=dt1.toString("yyyyMMddhhmm"),
                      !testDateTime.isEmpty()
                     ){testDateTime+="00";}
              else if (
-                     dt1=QDateTime::fromString(strList_cycleData[index_testTime],"M/dd/yyyy h:mm"),
+                     dt1=QDateTime::fromString(strList_cycleData[index_testTime],"M/d/yyyy h:mm"),
                      testDateTime=dt1.toString("yyyyMMddhhmm"),
                      !testDateTime.isEmpty()
                     ){testDateTime+="00";}
              else if (
-                     dt1=QDateTime::fromString(strList_cycleData[index_testTime],"M/dd/yyyy h:mm:ss"),
+                     dt1=QDateTime::fromString(strList_cycleData[index_testTime],"M/d/yyyy h:mm:ss"),
                      testDateTime=dt1.toString("yyyyMMddhhmmss"),
                      !testDateTime.isEmpty()
                     ){}
              else if (
-                     dt1=QDateTime::fromString(strList_cycleData[index_testTime],"M/dd/yyyy h:mm:ss A"),
+                     dt1=QDateTime::fromString(strList_cycleData[index_testTime],"M/d/yyyy h:mm:ss A"),
                      testDateTime=dt1.toString("yyyyMMddhhmmss"),
                      !testDateTime.isEmpty()
                     ){}
